@@ -66,21 +66,25 @@
 					switch (chartType) {
 						case 'line':
 						case 'radar': {
-							backgroundColor = gradient.colors(3, null)[i].alpha(0.2).hex();
-							borderColor = gradient.colors(3)[i];
+							backgroundColor = gradient.colors(3, null)[i].alpha(0.2).css();
+							borderColor = gradient.colors(3, null)[i].css();
 							break;
 						}
 						case 'bar': {
 							if (setsCount > 1) {
-								backgroundColor = gradient.colors(3)[i];
+								backgroundColor = gradient.colors(3, null)[i].css();
 							} else {
-								backgroundColor = gradient.colors(12);
+								backgroundColor = gradient.colors(12, null).map(function(color) {
+									return color.css();
+								});
 							}
 							borderWidth = 0;
 							break;
 						}
 						default: {
-							backgroundColor = gradient.colors(12);
+							backgroundColor = gradient.colors(12, null).map(function(color) {
+								return color.css();
+							});
 						}
 					}
 					return {
