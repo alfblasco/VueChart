@@ -18,7 +18,7 @@ A simple wrapper for Chart.
 npm i @seregpie/vue-chart
 ```
 
-### es6
+### ES module
 
 Register the component globally.
 

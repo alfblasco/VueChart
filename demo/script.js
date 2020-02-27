@@ -11,28 +11,28 @@
 				'pie',
 				'doughnut',
 			];
-			var numbersCountValues = [6, 9, 12];
-			var setsCountValues = [1, 2, 3];
+			var valuesCountValues = [6, 9, 12];
+			var seriesCountValues = [1, 2, 3];
 			return {
-				appDrawer: true,
 				chartType: chartTypeValues[1],
 				chartTypeValues: chartTypeValues,
-				numbersCount: numbersCountValues[1],
-				numbersCountValues: numbersCountValues,
+				drawer: true,
 				seed: Date.now(),
-				setsCount: setsCountValues[0],
-				setsCountValues: setsCountValues,
+				seriesCount: seriesCountValues[0],
+				seriesCountValues: seriesCountValues,
+				valuesCount: valuesCountValues[1],
+				valuesCountValues: valuesCountValues,
 			};
 		},
 		computed: {
 			chartData: function() {
 				var chartType = this.chartType;
-				var numbersCount = this.numbersCount;
 				var seed = this.seed;
-				var setsCount = this.setsCount;
+				var seriesCount = this.seriesCount;
+				var valuesCount = this.valuesCount;
 				var luck = new JustMyLuck(JustMyLuck.MersenneTwister(seed));
 				var gradient = chroma.scale(['#cddc39', '#3f51b5']).mode('lch');
-				var labels = [
+				var valueLabels = [
 					'January',
 					'February',
 					'March',
@@ -46,63 +46,82 @@
 					'November',
 					'December',
 				];
-				var datasets = [
+				var serieLabels = [
 					'Tokyo',
 					'Moscow',
 					'London',
-				].map(function(label, i) {
-					var data = Array.from({length: 12}, function() {
-						switch (chartType) {
-							case 'line':
-							case 'bar': {
-								return luck.integer(-25, 25);
-							}
-						}
-						return luck.integer(0, 25);
-					});
-					var backgroundColor;
-					var borderColor;
-					var borderWidth;
-					switch (chartType) {
-						case 'line':
-						case 'radar': {
-							backgroundColor = gradient.colors(3, null)[i].alpha(0.2).css();
-							borderColor = gradient.colors(3, null)[i].css();
-							break;
-						}
-						case 'bar': {
-							if (setsCount > 1) {
-								backgroundColor = gradient.colors(3, null)[i].css();
-							} else {
-								backgroundColor = gradient.colors(12, null).map(function(color) {
-									return color.css();
-								});
-							}
-							borderWidth = 0;
-							break;
-						}
-						default: {
-							backgroundColor = gradient.colors(12, null).map(function(color) {
-								return color.css();
-							});
-						}
-					}
-					return {
-						backgroundColor: backgroundColor,
-						borderColor: borderColor,
-						borderWidth: borderWidth,
-						data: data.slice(0, numbersCount),
-						label: label,
-					};
-				});
+				];
 				return {
-					labels: labels.slice(0, numbersCount),
-					datasets: datasets.slice(0, setsCount),
+					labels: valueLabels.slice(0, valuesCount),
+					datasets: (serieLabels
+						.map(function(label, i) {
+							var data = valueLabels.map(function() {
+								switch (chartType) {
+									case 'line':
+									case 'bar': {
+										return luck.integer(-25, 25);
+									}
+								}
+								return luck.integer(0, 25);
+							});
+							var backgroundColor;
+							var borderColor;
+							var borderWidth;
+							switch (chartType) {
+								case 'line':
+								case 'radar': {
+									backgroundColor = (gradient
+										.colors(serieLabels.length, null)[i]
+										.alpha(0.2)
+										.css()
+									);
+									borderColor = (gradient
+										.colors(serieLabels.length, null)[i]
+										.css()
+									);
+									break;
+								}
+								case 'bar': {
+									if (seriesCount > 1) {
+										backgroundColor = (gradient
+											.colors(serieLabels.length, null)[i]
+											.css()
+										);
+									} else {
+										backgroundColor = (gradient
+											.colors(valueLabels.length, null)
+											.map(function(color) {
+												return color.css();
+											})
+										);
+									}
+									borderWidth = 0;
+									break;
+								}
+								default: {
+									backgroundColor = (gradient
+										.colors(valueLabels.length, null)
+										.map(function(color) {
+											return color.css();
+										})
+									);
+								}
+							}
+							return {
+								backgroundColor: backgroundColor,
+								borderColor: borderColor,
+								borderWidth: borderWidth,
+								data: data.slice(0, valuesCount),
+								label: label,
+							};
+						})
+						.slice(0, seriesCount)
+					),
 				};
 			},
 		},
 		methods: {
-			randomizeNumbers: function() {
+			randomizeValues: function() {
 				this.seed = Date.now();
 			},
 		},

@@ -17,21 +17,21 @@
 			rel="stylesheet"
 		/>
 		<link
-			href="https://unpkg.com/@mdi/font@4.4.95/css/materialdesignicons.min.css"
+			href="https://unpkg.com/@mdi/font@4.9.95/css/materialdesignicons.min.css"
 			rel="stylesheet"
 		/>
 
 		<link
-			href="https://unpkg.com/vuetify@2.0.18/dist/vuetify.min.css"
+			href="https://unpkg.com/vuetify@2.2.15/dist/vuetify.min.css"
 			rel="stylesheet"
 		/>
-		<script src="https://unpkg.com/@babel/polyfill@7.6.0/dist/polyfill.min.js"></script>
-		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
-		<script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.min.js"></script>
+		<script src="https://unpkg.com/@babel/polyfill@7.8.3/dist/polyfill.min.js"></script>
+		<script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/chart.js@2.9.3/dist/Chart.min.js"></script>
 		<script src="index.js"></script>
 		<script src="https://unpkg.com/just-my-luck@1.0.1"></script>
-		<script src="https://unpkg.com/chroma-js@2.0.6/chroma.min.js"></script>
-		<script src="https://unpkg.com/vuetify@2.0.18/dist/vuetify.min.js"></script>
+		<script src="https://unpkg.com/chroma-js@2.1.0/chroma.min.js"></script>
+		<script src="https://unpkg.com/vuetify@2.2.15/dist/vuetify.min.js"></script>
 	</head>
 	<body>
 		<v-app
@@ -39,7 +39,7 @@
 			v-cloak
 		>
 			<v-navigation-drawer
-				v-model="appDrawer"
+				v-model="drawer"
 				app
 				clipped
 			>
@@ -55,30 +55,30 @@
 					</div>
 					<div class="pa-2">
 						<v-radio-group
-							v-model="numbersCount"
+							v-model="valuesCount"
 							class="ma-0 pa-0"
 							hide-details
-							label="numbers"
+							label="values"
 						>
 				      <v-radio
-				        v-for="value of numbersCountValues"
+				        v-for="value of valuesCountValues"
 				        :key="value"
-				        :label="value"
+				        :label="String(value)"
 				        :value="value"
 				      ></v-radio>
 				    </v-radio-group>
 					</div>
 					<div class="pa-2">
 						<v-radio-group
-							v-model="setsCount"
+							v-model="seriesCount"
 							class="ma-0 pa-0"
 							hide-details
-							label="sets of numbers"
+							label="series"
 						>
 				      <v-radio
-				        v-for="value of setsCountValues"
+				        v-for="value of seriesCountValues"
 				        :key="value"
-				        :label="value"
+				        :label="String(value)"
 				        :value="value"
 				      ></v-radio>
 				    </v-radio-group>
@@ -88,8 +88,8 @@
 							block
 							class="ma-0"
 							color="primary"
-							@click="randomizeNumbers"
-						>randomize numbers</v-btn>
+							@click="randomizeValues"
+						>randomize values</v-btn>
 					</div>
 				</div>
 			</v-navigation-drawer>
@@ -98,7 +98,7 @@
 				clipped-left
 				dark
 			>
-				<v-app-bar-nav-icon @click="appDrawer = !appDrawer"></v-app-bar-nav-icon>
+				<v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 				<v-toolbar-title>VueChart</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-btn
